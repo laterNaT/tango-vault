@@ -7,7 +7,7 @@ export function Nav({ showAvatar = true }) {
   return (
     <Flex p={4} bg="white" alignItems="center">
       <Box>
-        <Heading size="lg">{document.title}</Heading>
+        <Heading size="lg">TangoVault</Heading>
       </Box>
       <Spacer />
       {showAvatar ? (

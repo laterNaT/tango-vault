@@ -1,3 +1,4 @@
+import CustomContainer from "@/app/_components/CustomContainer";
 import { Center, Container, Divider, Heading, Text } from "@chakra-ui/react";
 import { Metadata } from "next";
 
@@ -7,14 +8,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <Container
-      flex={1}
-      maxW="container.md"
-      my={16}
-      borderRadius={7}
-      p={8}
-      bg="white"
-    >
+    <CustomContainer maxW="md">
       <Center mb="20">
         <Heading>Hello</Heading>
       </Center>
@@ -37,6 +31,6 @@ export default function Page() {
           neque blanditiis. Reprehenderit quaerat eos perspiciatis?
         </Text>
       </Container>
-    </Container>
+    </CustomContainer>
   );
 }

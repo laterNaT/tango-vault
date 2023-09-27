@@ -11,6 +11,7 @@ export default function CustomContainer({
     <Container
       flex={1}
       maxW={"container." + maxW}
+      minW="90vw"
       my={16}
       borderRadius={7}
       p={8}

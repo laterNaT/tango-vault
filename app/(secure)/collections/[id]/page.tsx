@@ -17,7 +17,7 @@ import React from "react";
 
 export default function Page({ params: { id } }: any) {
   return (
-    <CustomContainer maxW="xl">
+    <CustomContainer maxW="xl" minW="90vw">
       <Flex gap={8} mx={8}>
         <Box resize="horizontal" overflow="auto" w="100%">
           <TableContainer>

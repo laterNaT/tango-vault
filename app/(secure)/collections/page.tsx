@@ -17,6 +17,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 export default function Page() {
   return (
@@ -29,7 +30,9 @@ export default function Page() {
           <Input type="text" placeholder="Search for a collection" />
         </InputGroup>
         <HStack ml="2" spacing={2}>
-          <Button bg="brand.500">New Collection</Button>
+          <Button bg="brand.500" as={NextLink} href="/collections/new">
+            New Collection
+          </Button>
           <Button bg="brand.700">Export Data</Button>
         </HStack>
       </Flex>

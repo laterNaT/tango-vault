@@ -22,7 +22,13 @@ export default function Home() {
         >
           My collections
         </Button>
-        <Button size="lg" bg="brand.500" minW="15rem">
+        <Button
+          as={NextLink}
+          href="/review"
+          size="lg"
+          bg="brand.500"
+          minW="15rem"
+        >
           Review
         </Button>
         <Button size="lg" bg="brand.500" minW="15rem">

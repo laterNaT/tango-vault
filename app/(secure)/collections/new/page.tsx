@@ -57,16 +57,16 @@ export default function Page() {
               {errors.category && errors.category.message}
             </FormErrorMessage>
           </FormControl>
-        </Flex>
 
-        <HStack ml="2" spacing={2} mt={4}>
-          <Button bg="brand.500" type="submit">
-            Submit
-          </Button>
-          <Button bg="brand.700" as={NextLink} href="/collections">
-            Cancel
-          </Button>
-        </HStack>
+          <HStack spacing={2} mt={4}>
+            <Button bg="brand.500" type="submit">
+              Submit
+            </Button>
+            <Button bg="brand.700" as={NextLink} href="/collections">
+              Cancel
+            </Button>
+          </HStack>
+        </Flex>
       </form>
     </CustomContainer>
   );

@@ -1,7 +1,19 @@
 "use client";
 
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Avatar, Box, Flex, Heading, Spacer } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spacer,
+} from "@chakra-ui/react";
+import Link from "next/link";
 
 export function Nav({ showAvatar = true }) {
   return (
@@ -11,10 +23,22 @@ export function Nav({ showAvatar = true }) {
       </Box>
       <Spacer />
       {showAvatar ? (
-        <Box>
-          <Avatar size="sm" />
-          <ChevronDownIcon />
-        </Box>
+        <Menu>
+          <MenuButton
+            as={Button}
+            rounded={"full"}
+            variant={"link"}
+            cursor={"pointer"}
+          >
+            <Avatar size="sm" />
+            <ChevronDownIcon />
+          </MenuButton>
+          <MenuList>
+            <MenuItem as={Link} href={"/api/auth/signout"}>
+              Logout
+            </MenuItem>
+          </MenuList>
+        </Menu>
       ) : null}
     </Flex>
   );

@@ -13,7 +13,7 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUserService } from "@/app/_services/useUserService";
@@ -28,6 +28,7 @@ export default function Page() {
   const { errors } = formState;
   const { data: session } = useSession();
   const userService = useUserService();
+  const router = useRouter();
 
   useEffect(() => {
     if (session) {
@@ -43,7 +44,14 @@ export default function Page() {
   };
 
   const onSubmit = async (data: Inputs) => {
-    await userService.register(data);
+    try {
+      const res = await userService.register(data);
+      if (res) {
+        router.push("/api/auth/signin");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

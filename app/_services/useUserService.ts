@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 async function register({
   username,
   password,
@@ -15,11 +13,10 @@ async function register({
     });
 
     if (!res.ok) {
-      console.log("Something went wrong");
-      return;
+      return new Error("Error registering user");
+    } else {
+      return new Response("User registered", { status: 201 });
     }
-
-    redirect("/api/auth/signin");
   } catch (err: any) {
     console.log("Error registering user", err.message);
   }

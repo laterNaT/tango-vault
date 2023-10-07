@@ -1,6 +1,10 @@
 import type { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
+import { db } from "@/app/_helpers/server/db";
+
+const User = db.User;
 
 const options: NextAuthOptions = {
   providers: [
@@ -18,21 +22,27 @@ const options: NextAuthOptions = {
           placeholder: "Enter your password",
         },
       },
-      authorize(credentials) {
-        const user = {
-          id: "1234",
-          name: "bob",
-          password: "nextauth",
-          aa: "aaa",
-        };
-        if (
-          credentials?.username == user.name &&
-          credentials?.password == user.password
-        ) {
-          return user;
-        } else {
+      async authorize(credentials, req) {
+        if (!credentials?.username || !credentials?.password) {
           return null;
         }
+
+        const user = await User.findOne({ username: credentials.username });
+
+        if (!user) {
+          return null;
+        }
+
+        const match = await bcrypt.compare(credentials.password, user.password);
+
+        if (!match) {
+          return null;
+        }
+
+        return {
+          ...user.toObject(),
+          name: user.username,
+        };
       },
     }),
   ],

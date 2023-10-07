@@ -70,6 +70,16 @@ function userModel() {
       delete ret.password;
     },
   });
+
+  schema.set("toObject", {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      delete ret._id;
+      delete ret.password;
+    },
+  });
+
   return (
     (mongoose.models.User as mongoose.Model<User>) ||
     mongoose.model<User>("User", schema)

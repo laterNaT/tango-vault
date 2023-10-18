@@ -7,6 +7,7 @@ import {
   Button,
   Flex,
   Heading,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -18,9 +19,10 @@ import Link from "next/link";
 export function Nav({ showAvatar = true }) {
   return (
     <Flex p={4} bg="white" alignItems="center">
-      <Box>
+      <Flex justifyContent={"center"} alignItems={"center"}>
+        <Image src="logo.png" alt="Company Logo" boxSize="60px" mr={4} />
         <Heading size="lg">TangoVault</Heading>
-      </Box>
+      </Flex>
       <Spacer />
       {showAvatar ? (
         <Menu>

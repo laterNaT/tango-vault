@@ -6,7 +6,7 @@ import { db } from "@/app/_helpers/server/db";
 
 const User = db.User;
 
-const options: NextAuthOptions = {
+export const OPTIONS: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -41,13 +41,12 @@ const options: NextAuthOptions = {
 
         return {
           ...user.toObject(),
-          name: user.username,
         };
       },
     }),
   ],
 };
 
-const handler = NextAuth(options);
+const handler = NextAuth(OPTIONS);
 
 export { handler as GET, handler as POST };

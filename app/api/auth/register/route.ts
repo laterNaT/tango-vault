@@ -1,15 +1,24 @@
 import { registerUser } from "@/app/_helpers/server/users-repo";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
-async function register(request: NextRequest) {
-  const { username, password } = await request.json();
+const schema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
 
-  if (!password || !password) {
-    return new Response("Missing username or password", {status: 400})
-  }
-
+async function register(req: NextRequest) {
   try {
-    await registerUser({username, password});
+    const body = await req.json();
+    const result = schema.safeParse(body);
+
+    if (!result.success) {
+      return new Response("Missing username or password", { status: 400 });
+    }
+
+    const { username, password } = result.data;
+
+    await registerUser({ username, password });
   } catch (err: unknown) {
     if (err instanceof Error) {
       if (err.message === "Username already exists") {

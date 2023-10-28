@@ -13,7 +13,7 @@ async function register({
     });
 
     if (!res.ok) {
-      return new Error("Error registering user");
+      throw new Error("Error registering user");
     } else {
       return new Response("User registered", { status: 201 });
     }

@@ -46,7 +46,7 @@ export default function Page() {
   const onSubmit = async (data: Inputs) => {
     try {
       const res = await userService.register(data);
-      if (res) {
+      if (res && res.ok) {
         router.push("/api/auth/signin");
       }
     } catch (error) {

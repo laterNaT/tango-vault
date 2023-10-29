@@ -37,7 +37,7 @@ mongoose
 function userModel() {
   const schema = new mongoose.Schema<User>(
     {
-      username: { type: String, required: true },
+      username: { type: String, required: true, unique: true },
       password: { type: String, required: true },
       totalCardCount: { type: Number, required: false, default: 0 },
       lastReviewSession: { type: Date, required: false },

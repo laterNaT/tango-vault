@@ -25,19 +25,20 @@ type User = {
 };
 
 // Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI!)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.log("Error connecting to MongoDB", err);
-  });
+// mongoose
+//   .connect(process.env.MONGODB_URI!)
+//   .then(() => {
+//     console.log("Connected to MongoDB");
+//   })
+//   .catch((err) => {
+//     console.log("Error connecting to MongoDB", err);
+//   });
 
+// TODO: move to models folder? one model file per schema
 function userModel() {
   const schema = new mongoose.Schema<User>(
     {
-      username: { type: String, required: true, unique: true },
+      username: { type: String, required: true, unique: true }, // NOTE: unique != validator
       password: { type: String, required: true },
       totalCardCount: { type: Number, required: false, default: 0 },
       lastReviewSession: { type: Date, required: false },
@@ -86,6 +87,6 @@ function userModel() {
   );
 }
 
-export const db = {
+export const dbTypes = {
   User: userModel(),
 };

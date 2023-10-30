@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
-import { db } from "./db";
-const User = db.User;
+import { dbTypes } from "./db-types";
+import { dbConnect } from "@/app/_helpers/server/db-setup";
+const User = dbTypes.User;
 
 export async function registerUser({
   username,
@@ -10,6 +11,8 @@ export async function registerUser({
   password: string;
 }) {
   try {
+    await dbConnect();
+
     const user = await User.findOne({ username: username });
 
     if (user) {

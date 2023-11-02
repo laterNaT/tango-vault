@@ -9,7 +9,7 @@ import { dbConnect } from "@/app/_helpers/server/db-setup";
 const User = dbTypes.User;
 
 export const OPTIONS: NextAuthOptions = {
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: MongoDBAdapter(clientPromise), // will populate token.sub property
   session: {
     strategy: "jwt",
   },
@@ -57,16 +57,22 @@ export const OPTIONS: NextAuthOptions = {
       },
     }),
   ],
-  // callbacks: {
-  //   jwt: async ({ token, account }) => {
-  //     console.log("inside jwt");
-  //     console.log("account: ", account);
-  //     console.log("token: ", token);
-  //     return token;
-  //   },
-  //   session: async ({ session, token }) => {
-  //     console.log("inside session");
-  //     return session;
-  //   },
-  // },
+  callbacks: {
+    signIn: async ({ user, account }) => {
+      console.log(user);
+      return true;
+    },
+    jwt: async ({ token, user, account, profile }) => {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+  },
 };

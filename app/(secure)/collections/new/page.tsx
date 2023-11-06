@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { createCollection } from "@/app/_services/useUserDataService";
 
 type Inputs = {
   collectionName: string;
@@ -23,6 +25,7 @@ type Inputs = {
 
 export default function Page() {
   const { register, handleSubmit, formState, control } = useForm<Inputs>();
+  const { data: session } = useSession();
   const { errors } = formState;
 
   const fields = {
@@ -32,7 +35,10 @@ export default function Page() {
     category: register("category", { required: "Category is required." }),
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { collectionName: name, category } = data;
+    await createCollection({ name, category });
+  };
 
   return (
     <CustomContainer maxW="md">

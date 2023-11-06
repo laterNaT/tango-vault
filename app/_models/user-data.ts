@@ -9,6 +9,7 @@ type Card = {
 
 type Collection = {
   name: string;
+  category: string;
   cards: Card[];
   reviewCount: number;
   failCount: number;
@@ -33,6 +34,7 @@ const userDataSchema = new mongoose.Schema<UserData>(
     collections: [
       {
         name: { type: String, required: true },
+        category: { type: String, required: true },
         cards: [
           {
             word: { type: String, required: true },

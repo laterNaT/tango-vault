@@ -17,6 +17,7 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { createCollection } from "@/app/_services/useUserDataService";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   collectionName: string;
@@ -27,6 +28,7 @@ export default function Page() {
   const { register, handleSubmit, formState, control } = useForm<Inputs>();
   const { data: session } = useSession();
   const { errors } = formState;
+  const router = useRouter();
 
   const fields = {
     collectionName: register("collectionName", {
@@ -37,7 +39,10 @@ export default function Page() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { collectionName: name, category } = data;
-    await createCollection({ name, category });
+    const res = await createCollection({ name, category });
+    if (res) {
+      router.push("/collections");
+    }
   };
 
   return (

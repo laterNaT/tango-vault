@@ -12,8 +12,10 @@ export async function newCollection({
 }) {
   try {
     // todo: check if collection already created with same name
+    await dbConnect(); // todo: we have to have this line or we cant connect to mongoDB
+
     await UserData.updateOne(
-      { $userId: id },
+      { userId: id },
       { $push: { collections: { name, category } } },
     );
   } catch (e) {

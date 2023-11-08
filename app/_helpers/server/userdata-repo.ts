@@ -11,8 +11,16 @@ export async function createCollectionDB({
   category: string;
 }) {
   try {
-    // todo: check if collection already created with same name
     await dbConnect(); // todo: we have to have this line or we cant connect to mongoDB
+
+    const existingCollection = await UserData.findOne({
+      userId: id,
+      "collections.name": name,
+    });
+
+    if (existingCollection) {
+      throw new Error("Collection with the same name already exists");
+    }
 
     await UserData.updateOne(
       { userId: id },
@@ -20,7 +28,9 @@ export async function createCollectionDB({
     );
   } catch (e) {
     console.log(e);
-    // TODO: throw back to caller (route handler)
+    if (e instanceof Error) {
+      throw new Error(`Error in createCollectionDB: ${e.message}`);
+    }
   }
 }
 

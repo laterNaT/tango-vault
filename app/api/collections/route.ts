@@ -1,7 +1,7 @@
 import { NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { OPTIONS } from "@/app/_config/options";
-import { newCollection as newCollectionDB } from "@/app/_helpers/server/userdata-repo";
+import { createCollectionDB } from "@/app/_helpers/server/userdata-repo";
 
 import { z } from "zod";
 
@@ -10,7 +10,7 @@ const schema = z.object({
   category: z.string(),
 });
 
-async function newCollection(req: Request, res: NextApiResponse) {
+async function createCollectionHandler(req: Request, res: NextApiResponse) {
   try {
     const session = await getServerSession(OPTIONS);
 
@@ -27,7 +27,7 @@ async function newCollection(req: Request, res: NextApiResponse) {
 
     const id = session.user.id;
 
-    await newCollectionDB({ id, ...data });
+    await createCollectionDB({ id, ...data });
 
     return new Response("New collection created successfully", { status: 200 });
   } catch (e) {
@@ -36,4 +36,26 @@ async function newCollection(req: Request, res: NextApiResponse) {
   }
 }
 
-export { newCollection as POST };
+/**
+ * Returns list of users collections
+ */
+// async function getCollectionsHandler(req: Request) {
+//   try {
+//     const session = await getServerSession(OPTIONS);
+//
+//     if (!session || !session.user) {
+//       return new Response("Session error", { status: 401 });
+//     }
+//
+//     const id = session.user.id;
+//
+//     const res = await getCollectionsDB(id);
+//
+//     return new Response(res, { status: 200 });
+//   } catch (e) {
+//     console.log(e);
+//     return new Response("Internal server error", { status: 500 });
+//   }
+// }
+
+export { createCollectionHandler as POST };

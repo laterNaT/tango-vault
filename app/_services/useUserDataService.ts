@@ -1,4 +1,4 @@
-export async function createCollection({
+export async function createCollectionHelper({
   name,
   category,
 }: {

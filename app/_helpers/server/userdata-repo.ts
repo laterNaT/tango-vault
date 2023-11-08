@@ -1,7 +1,7 @@
 import UserData from "@/app/_models/user-data";
 import { dbConnect } from "@/app/_helpers/server/db-setup";
 
-export async function newCollection({
+export async function createCollectionDB({
   id,
   name,
   category,
@@ -20,5 +20,20 @@ export async function newCollection({
     );
   } catch (e) {
     console.log(e);
+    // TODO: throw back to caller (route handler)
   }
 }
+
+// export async function getCollectionsDB(id: string) {
+//   try {
+//     const userData = await UserData.findOne({ userId: id });
+//     if (!userData) {
+//       throw new Error("Could not find userData");
+//     }
+//     return userData.collections;
+//   } catch (e) {
+//     if (e instanceof Error) {
+//       throw new Error(`Error in getCollections: ${e.message}`);
+//     }
+//   }
+// }

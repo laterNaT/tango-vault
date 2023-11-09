@@ -1,27 +1,27 @@
 import mongoose from "mongoose";
 
-type Card = {
+export type Card = {
   word: string;
   wordReading: string;
   wordMeaning: string;
   sentence: string;
 };
 
-type Collection = {
+export type Collection = {
   name: string;
   category: string;
   cards: Card[];
   reviewCount: number;
   failCount: number;
-  lastReviewSession: Date;
+  lastReviewSession?: Date;
   created: Date;
 };
 
-type UserData = {
+export type UserData = {
   userId: mongoose.Schema.Types.ObjectId;
   loginCount: number;
   totalCardCount: number;
-  lastReviewSession: Date;
+  lastReviewSession?: Date;
   collections: Collection[];
 };
 
@@ -46,7 +46,7 @@ const userDataSchema = new mongoose.Schema<UserData>(
         reviewCount: { type: Number, required: false, default: 0 },
         failCount: { type: Number, required: false, default: 0 },
         lastReviewSession: { type: Date, required: false },
-        created: { type: Date, required: false },
+        created: { type: Date, required: false, default: new Date() },
       },
     ],
   },

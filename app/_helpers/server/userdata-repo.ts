@@ -34,16 +34,18 @@ export async function createCollectionDB({
   }
 }
 
-// export async function getCollectionsDB(id: string) {
-//   try {
-//     const userData = await UserData.findOne({ userId: id });
-//     if (!userData) {
-//       throw new Error("Could not find userData");
-//     }
-//     return userData.collections;
-//   } catch (e) {
-//     if (e instanceof Error) {
-//       throw new Error(`Error in getCollections: ${e.message}`);
-//     }
-//   }
-// }
+export async function getCollectionsDB(id: string) {
+  try {
+    await dbConnect(); // todo: we have to have this line or we cant connect to mongoDB
+
+    const userData = await UserData.findOne({ userId: id });
+    if (!userData) {
+      throw new Error("Could not find collections");
+    }
+    return userData.collections;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(`Error in getCollections: ${e.message}`);
+    }
+  }
+}

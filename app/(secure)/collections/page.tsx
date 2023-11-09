@@ -18,8 +18,28 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import type { Collection } from "@/app/_models/user-data";
+import { useEffect, useState } from "react";
+
+async function fetchCollections(): Promise<Collection[] | undefined> {
+  try {
+    const res = await fetch("/api/collections");
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 export default function Page() {
+  const [collections, setCollections] = useState<Collection[] | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    fetchCollections().then((data) => setCollections(data));
+  }, []);
+
   return (
     <>
       <Flex justifyContent="center" mt="6">
@@ -49,78 +69,23 @@ export default function Page() {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr
-                _hover={{
-                  cursor: "pointer",
-                }}
-                onClick={() => alert("hello")}
-              >
-                <Td>Collection 1</Td>
-                <Td>200</Td>
-                <Td>Books</Td>
-                <Td>2023-01-01</Td>
-                <Td>2023-02-01</Td>
-              </Tr>
-              <Tr
-                _hover={{
-                  cursor: "pointer",
-                }}
-                onClick={() => alert("hello")}
-              >
-                <Td>Collection 2</Td>
-                <Td>200</Td>
-                <Td>Books</Td>
-                <Td>2023-01-01</Td>
-                <Td>2023-02-01</Td>
-              </Tr>
-              <Tr
-                _hover={{
-                  cursor: "pointer",
-                }}
-                onClick={() => alert("hello")}
-              >
-                <Td>Collection 3</Td>
-                <Td>200</Td>
-                <Td>Books</Td>
-                <Td>2023-01-01</Td>
-                <Td>2023-02-01</Td>
-              </Tr>
-              <Tr
-                _hover={{
-                  cursor: "pointer",
-                }}
-                onClick={() => alert("hello")}
-              >
-                <Td>Collection 4</Td>
-                <Td>200</Td>
-                <Td>Books</Td>
-                <Td>2023-01-01</Td>
-                <Td>2023-02-01</Td>
-              </Tr>
-              <Tr
-                _hover={{
-                  cursor: "pointer",
-                }}
-                onClick={() => alert("hello")}
-              >
-                <Td>Collection 5</Td>
-                <Td>200</Td>
-                <Td>Books</Td>
-                <Td>2023-01-01</Td>
-                <Td>2023-02-01</Td>
-              </Tr>
-              <Tr
-                _hover={{
-                  cursor: "pointer",
-                }}
-                onClick={() => alert("hello")}
-              >
-                <Td>Collection 6</Td>
-                <Td>200</Td>
-                <Td>Books</Td>
-                <Td>2023-01-01</Td>
-                <Td>2023-02-01</Td>
-              </Tr>
+              {collections?.map((collection, index) => (
+                <Tr
+                  _hover={{
+                    cursor: "pointer",
+                  }}
+                  key={index}
+                  onClick={() => alert("hello")}
+                >
+                  <Td>{collection.name}</Td>
+                  <Td>{collection.cards.length}</Td>
+                  <Td>{collection.category}</Td>
+                  <Td>{collection.created?.toDateString()}</Td>
+                  <Td>
+                    {collection.lastReviewSession?.toDateString() ?? "None"}
+                  </Td>
+                </Tr>
+              ))}
             </Tbody>
           </Table>
         </TableContainer>

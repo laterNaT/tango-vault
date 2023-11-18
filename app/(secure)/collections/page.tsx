@@ -1,7 +1,7 @@
 "use client";
 
 import CustomContainer from "@/app/_components/CustomContainer";
-import { SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
@@ -21,6 +21,15 @@ import NextLink from "next/link";
 import type { Collection } from "@/app/_models/user-data";
 import { useEffect, useState } from "react";
 
+type SortOrder = "asc" | "desc";
+
+type SortField =
+  | "name"
+  | "cards"
+  | "category"
+  | "created"
+  | "lastReviewSession";
+
 async function fetchCollections(): Promise<Collection[] | undefined> {
   try {
     const res = await fetch("/api/collections");
@@ -36,7 +45,36 @@ export default function Page() {
     undefined,
   );
 
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toDateString();
+  };
+
+  const onSort = (field: SortField) => {
+    if (!field) return;
+    const order = field === sortField && sortOrder === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortOrder(order);
+
+    setCollections((prevCollections) => {
+      if (!prevCollections) return prevCollections;
+
+      return [...prevCollections].sort((a, b) => {
+        const aValue = a[field] ?? "";
+        const bValue = b[field] ?? "";
+
+        if (aValue < bValue) return order === "asc" ? -1 : 1;
+        if (aValue > bValue) return order === "asc" ? 1 : -1;
+        return 0;
+      });
+    });
+  };
+
   useEffect(() => {
+    // TODO: use useUserDataService
     fetchCollections().then((data) => setCollections(data));
   }, []);
 
@@ -61,31 +99,58 @@ export default function Page() {
           <Table variant="striped" colorScheme="facebook">
             <Thead>
               <Tr>
-                <Th>Collection name</Th>
-                <Th>Card Count</Th>
-                <Th>Category</Th>
-                <Th>Created</Th>
-                <Th>Last Review Session</Th>
+                {[
+                  "name",
+                  "cards",
+                  "category",
+                  "created",
+                  "lastReviewSession",
+                ].map((field) => (
+                  <Th
+                    key={field}
+                    onClick={() => onSort(field as SortField)}
+                    style={{ cursor: "pointer" }}
+                    position="relative"
+                  >
+                    {field}{" "}
+                    {sortField === field &&
+                      (sortOrder === "asc" ? (
+                        <TriangleUpIcon color={"black"} ml={2} />
+                      ) : (
+                        <TriangleDownIcon color={"black"} ml={2} />
+                      ))}
+                  </Th>
+                ))}
               </Tr>
             </Thead>
             <Tbody>
-              {collections?.map((collection, index) => (
-                <Tr
-                  _hover={{
-                    cursor: "pointer",
-                  }}
-                  key={index}
-                  onClick={() => alert("hello")}
-                >
-                  <Td>{collection.name}</Td>
-                  <Td>{collection.cards.length}</Td>
-                  <Td>{collection.category}</Td>
-                  <Td>{collection.created?.toDateString()}</Td>
-                  <Td>
-                    {collection.lastReviewSession?.toDateString() ?? "None"}
+              {collections && collections.length > 0 ? (
+                collections.map((collection, index) => (
+                  <Tr
+                    _hover={{
+                      cursor: "pointer",
+                    }}
+                    key={index}
+                    onClick={() => alert("hello")}
+                  >
+                    <Td>{collection.name}</Td>
+                    <Td>{collection.cards.length}</Td>
+                    <Td>{collection.category}</Td>
+                    <Td>
+                      {formatDate(collection.created as unknown as string)}
+                    </Td>
+                    <Td>
+                      {collection.lastReviewSession?.toDateString() ?? "None"}
+                    </Td>
+                  </Tr>
+                ))
+              ) : (
+                <Tr>
+                  <Td colSpan={5} textAlign="center">
+                    No collections yet created
                   </Td>
                 </Tr>
-              ))}
+              )}
             </Tbody>
           </Table>
         </TableContainer>
